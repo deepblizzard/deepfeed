@@ -3,6 +3,8 @@ import { headers as getHeaders } from "next/headers";
 import { wait } from "./utils";
 
 
+
+
 function safeHeaders(): HeadersInit | undefined {
   try {
     return getHeaders();
