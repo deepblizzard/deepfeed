@@ -2,7 +2,7 @@ import Env from "@/config/env";
 import { headers as getHeaders } from "next/headers";
 import { wait } from "./utils";
 
-// Safe wrapper for headers()
+
 function safeHeaders(): HeadersInit | undefined {
   try {
     return getHeaders();
@@ -115,3 +115,4 @@ export async function searchUser(query: string) {
   const response = await res.json();
   return response?.data;
 }
+
