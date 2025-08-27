@@ -7,6 +7,7 @@ export interface CustomSession {
   user?: CustomUser;
   expires: ISODateString;
 }
+
 export interface CustomUser {
   id?: string | null;
   name?: string | null;
@@ -14,6 +15,7 @@ export interface CustomUser {
   email?: string | null;
   image?: string | null;
 }
+
 export const authOptions: AuthOptions = {
   pages: {
     signIn: "/login",
@@ -25,21 +27,17 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-
     async session({
       session,
       token,
-      user,
     }: {
       session: CustomSession;
       token: JWT;
-      user: User;
     }) {
       session.user = token.user as CustomUser;
       return session;
     },
   },
-
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -47,7 +45,7 @@ export const authOptions: AuthOptions = {
         email: {},
         password: {},
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const user = await prisma.user.findUnique({
           where: {
             email: credentials?.email,
