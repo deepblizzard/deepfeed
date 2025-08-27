@@ -1,11 +1,20 @@
 import Env from "@/config/env";
-import { headers } from "next/headers";
+import { headers as getHeaders } from "next/headers";
 import { wait } from "./utils";
+
+// Safe wrapper for headers()
+function safeHeaders(): HeadersInit | undefined {
+  try {
+    return getHeaders();
+  } catch {
+    return undefined;
+  }
+}
 
 export async function fetchPosts(page: number) {
   const res = await fetch(`${Env.APP_URL}/api/post?page=${page}`, {
     cache: "no-cache",
-    headers: headers(),
+    headers: safeHeaders(),
   });
   if (!res.ok) {
     throw new Error("Failed to fecth posts");
@@ -17,7 +26,7 @@ export async function fetchPosts(page: number) {
 
 export async function fetchUsers() {
   const res = await fetch(`${Env.APP_URL}/api/user`, {
-    headers: headers(),
+    headers: safeHeaders(),
     next: {
       revalidate: 3600,
     },
@@ -29,10 +38,9 @@ export async function fetchUsers() {
   return response?.data;
 }
 
-// * Fetch user posts
 export async function fetchUserPosts() {
   const res = await fetch(`${Env.APP_URL}/api/user/post`, {
-    headers: headers(),
+    headers: safeHeaders(),
     cache: "no-cache",
     next: {
       revalidate: 3600,
@@ -45,10 +53,9 @@ export async function fetchUserPosts() {
   return response!.data;
 }
 
-// * Fetch user comments
 export async function fetchUserComments() {
   const res = await fetch(`${Env.APP_URL}/api/user/comment`, {
-    headers: headers(),
+    headers: safeHeaders(),
     cache: "default",
     next: {
       revalidate: 3600,
@@ -61,11 +68,10 @@ export async function fetchUserComments() {
   return response!.data;
 }
 
-// * display post
 export async function fetchPost(id: number) {
   const res = await fetch(`${Env.APP_URL}/api/post/${id}`, {
     cache: "no-cache",
-    headers: headers(),
+    headers: safeHeaders(),
   });
   if (!res.ok) {
     throw new Error("Failed to fecth posts");
@@ -74,10 +80,9 @@ export async function fetchPost(id: number) {
   return response?.data;
 }
 
-// * Fetch user Notifications
 export async function fetchNotifications() {
   const res = await fetch(`${Env.APP_URL}/api/notifications`, {
-    headers: headers(),
+    headers: safeHeaders(),
     cache: "no-cache",
   });
   if (!res.ok) {
@@ -87,7 +92,6 @@ export async function fetchNotifications() {
   return response?.data;
 }
 
-// * Show user with their posts and comments
 export async function fetchUser(id: number) {
   const res = await fetch(`${Env.APP_URL}/api/user/${id}`, {
     cache: "no-cache",
@@ -99,11 +103,10 @@ export async function fetchUser(id: number) {
   return response?.data;
 }
 
-// *  explore the users
 export async function searchUser(query: string) {
   const res = await fetch(`${Env.APP_URL}/api/explore?query=${query}`, {
     cache: "no-cache",
-    headers: headers(),
+    headers: safeHeaders(),
   });
   if (!res.ok) {
     throw new Error("Failed to fecth posts");
